@@ -967,7 +967,7 @@
   window._XMLHttpRequest = window.XMLHttpRequest;
   window.XMLHttpRequest = function ()
   {
-    this._context = {delegate: null, requestHeaders: {}, responseHeaders: {},
+    this._context = {delegate: null, requestHeaders: { "User-Agent": navigator.userAgent }, responseHeaders: {},
       listeners: {}, readyState: 0, responseType: "text", withCredentials: false,
       upload: new _XMLHttpRequestUpload(), status: 0};
 
