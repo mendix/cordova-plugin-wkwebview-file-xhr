@@ -123,6 +123,13 @@ NS_ASSUME_NONNULL_BEGIN
     [super dispose];
 
 }
+
+-(NSString *) runPath
+{
+    NSString* libPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject];
+    return [libPath stringByAppendingPathComponent:@"NoCloud"];
+}
+    
 /*!
  * @param uri target relative file from the XMLHttpRequest polyfill
  * @return URL relative to the main bundle's www folder
@@ -137,9 +144,8 @@ NS_ASSUME_NONNULL_BEGIN
     }
     else
     {
-        NSURL *baseURL = [[NSBundle mainBundle] resourceURL];
         NSString *wwwuri = [NSString stringWithFormat:@"www/%@", uri];
-        targetURL = [NSURL URLWithString:wwwuri relativeToURL:baseURL];
+        targetURL = [NSURL URLWithString:wwwuri relativeToURL:[NSURL fileURLWithPath: [self runPath]]];
     }
     
     return targetURL;
@@ -154,7 +160,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 -(BOOL)isWebContentResourceSecure: (NSURL*) targetURL
 {
-    NSURL *baseURL = [NSURL URLWithString:@"www" relativeToURL:[[NSBundle mainBundle] resourceURL]];
+    NSURL *baseURL = [NSURL fileURLWithPath: [self runPath]];
     NSString *basePath = [baseURL absoluteString];
     NSString *targetPath = [[targetURL standardizedURL] absoluteString];
     return [targetPath hasPrefix:basePath];
